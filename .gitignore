@@ -1,0 +1,21 @@
+# Eclipse
+/.settings/
+/bin/
+.metadata
+.classpath
+.project
+.externalToolBuilders/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Gradle
+.gradle
+build/
+
+# MCForge
+/target
+/libs/

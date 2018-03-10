@@ -1,10 +1,10 @@
 [
 {
-  "modid": "ll5_kawo",
-  "name": "Kawo Modes Extended",
+  "modid": "ll5_uuem",
+  "name": "Lyons Unofficially Updated Maid Modes",
   "description": "Updates to Kawo Commons and Modes",
   "mcversion": "1.7.10",
-  "version" : "1.0",
+  "version" : "1.2",
   "url": "https://github.com/Lyonlancer5/Kawo-Modes-Ext",
   "updateUrl": "",
   "authors": ["Lyonlancer5"],
@@ -12,6 +12,6 @@
   "logoFile": "",
   "screenshots": [],
   "parent":"",
-  "dependencies": ["lmmx", "ll5_unmapi"]
+  "dependencies": ["lmmx"]
 }
 ]

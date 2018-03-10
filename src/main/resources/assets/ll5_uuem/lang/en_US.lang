@@ -1,0 +1,26 @@
+littleMaidMob.mode.Accounter=Accounter
+littleMaidMob.mode.DoorKeeper=DoorKeeper
+littleMaidMob.mode.F-Accounter=F-Accounter
+littleMaidMob.mode.SugarHunter=SugarHunter
+littleMaidMob.mode.F-SugarHunter=F-SugarHunter
+littleMaidMob.mode.T-SugarHunter=T-SugarHunter
+littleMaidMob.mode.D-SugarHunter=D-SugarHunter
+item.awauBook.name=Book of Captive
+item.awauCard.name=Bastille Card
+
+commands.ctcs.usage=/ctcs <join|leave|nick|switch> <value...>
+commands.ctcs.noUsr=Only the server instance and players may use this command
+commands.ctcs.scmd=Invalid sub-command. Available subcommands are join, leave, nick and switch
+commands.ctcs.join.usage=join requires an IP Address and a port in this format: /ctcs join <IP Address> <port>
+commands.ctcs.notConnected=Not connected to a server
+commands.ctcs.nick.setFailed=Unable to set nick
+commands.ctcs.switch.mc=Set chat console to MC
+commands.ctcs.switch.ctcs=Set chat console to CTCS
+commands.ctcs.send.failed=Unable to send message
+
+commands.ctcs.server.connectFailed=Unable to connect to the server: %s
+commands.ctcs.server.connected=Connected to %s:%d
+commands.ctcs.server.leave=You have left the server
+commands.ctcs.server.noEst=The connection could not be fully established
+commands.ctcs.server.noLogin=Unable to login: %s
+commands.ctcs.server.invPingReply=Invalid ping response: %s

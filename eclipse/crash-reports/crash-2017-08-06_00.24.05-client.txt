@@ -1,0 +1,99 @@
+---- Minecraft Crash Report ----
+// Oh - I know what I did wrong!
+
+Time: 8/6/17 12:24 AM
+Description: Initializing game
+
+java.lang.AbstractMethodError
+	at net.minecraft.client.resources.SimpleReloadableResourceManager$1.apply(SimpleReloadableResourceManager.java:104)
+	at net.minecraft.client.resources.SimpleReloadableResourceManager$1.apply(SimpleReloadableResourceManager.java:108)
+	at com.google.common.collect.Iterators$8.transform(Iterators.java:794)
+	at com.google.common.collect.TransformedIterator.next(TransformedIterator.java:48)
+	at com.google.common.base.Joiner.appendTo(Joiner.java:111)
+	at com.google.common.base.Joiner.appendTo(Joiner.java:152)
+	at com.google.common.base.Joiner.join(Joiner.java:193)
+	at com.google.common.base.Joiner.join(Joiner.java:183)
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.reloadResources(SimpleReloadableResourceManager.java:99)
+	at net.minecraft.client.Minecraft.refreshResources(Minecraft.java:654)
+	at cpw.mods.fml.client.FMLClientHandler.beginMinecraftLoading(FMLClientHandler.java:238)
+	at net.minecraft.client.Minecraft.startGame(Minecraft.java:522)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:942)
+	at net.minecraft.client.main.Main.main(Main.java:164)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(Unknown Source)
+	at GradleStart.main(Unknown Source)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at net.minecraft.client.resources.SimpleReloadableResourceManager$1.apply(SimpleReloadableResourceManager.java:104)
+	at net.minecraft.client.resources.SimpleReloadableResourceManager$1.apply(SimpleReloadableResourceManager.java:108)
+	at com.google.common.collect.Iterators$8.transform(Iterators.java:794)
+	at com.google.common.collect.TransformedIterator.next(TransformedIterator.java:48)
+	at com.google.common.base.Joiner.appendTo(Joiner.java:111)
+	at com.google.common.base.Joiner.appendTo(Joiner.java:152)
+	at com.google.common.base.Joiner.join(Joiner.java:193)
+	at com.google.common.base.Joiner.join(Joiner.java:183)
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.reloadResources(SimpleReloadableResourceManager.java:99)
+	at net.minecraft.client.Minecraft.refreshResources(Minecraft.java:654)
+	at cpw.mods.fml.client.FMLClientHandler.beginMinecraftLoading(FMLClientHandler.java:238)
+	at net.minecraft.client.Minecraft.startGame(Minecraft.java:522)
+
+-- Initialization --
+Details:
+Stacktrace:
+	at net.minecraft.client.Minecraft.run(Minecraft.java:942)
+	at net.minecraft.client.main.Main.main(Main.java:164)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(Unknown Source)
+	at GradleStart.main(Unknown Source)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.7.10
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_131, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 75041720 bytes (71 MB) / 318242816 bytes (303 MB) up to 814743552 bytes (777 MB)
+	JVM Flags: 0 total; 
+	AABB Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP v9.05 FML v7.10.99.99 Minecraft Forge 10.13.4.1558 8 mods loaded, 8 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UC	mcp{9.05} [Minecraft Coder Pack] (minecraft.jar) 
+	UC	FML{7.10.99.99} [Forge Mod Loader] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UC	Forge{10.13.4.1558} [Minecraft Forge] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UC	OldModelLoader{1.0} [OldModelLoader] (minecraft.jar) 
+	UC	lmmx{1.0} [lmmx] (littleMaidMobX-1.7.x_0.1.3a.jar) 
+	UC	MMMLibX{1.7.x-srg-1} [MMMLibX] (littleMaidMobX-1.7.x_0.1.3a.jar) 
+	UC	zabuton{1.0} [zabuton] (littleMaidMobX-1.7.x_0.1.3a.jar) 
+	UC	ll5_kawo{1.1} [Kawo Modes Extended] ([1.7.10] Kawo Modes Extended-1.0.jar) 
+	GL info: ' Vendor: 'ATI Technologies Inc.' Version: '4.5.13491 Compatibility Profile Context 22.19.662.4' Renderer: 'AMD Radeon (TM) R5 M430'
+	Launched Version: 1.7.10
+	LWJGL: 2.9.1
+	OpenGL: AMD Radeon (TM) R5 M430 GL version 4.5.13491 Compatibility Profile Context 22.19.662.4, ATI Technologies Inc.
+	GL Caps: Using GL 1.3 multitexturing.
+Using framebuffer objects because OpenGL 3.0 is supported and separate blending is supported.
+Anisotropic filtering is supported and maximum anisotropy is 16.
+Shaders are available because OpenGL 2.1 is supported.
+
+	Is Modded: Definitely; Client brand changed to 'fml,forge'
+	Type: Client (map_client.txt)
+	Resource Packs: []
+	Current Language: ~~ERROR~~ NullPointerException: null
+	Profiler Position: N/A (disabled)
+	Vec3 Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	Anisotropic Filtering: Off (1)

@@ -17,9 +17,9 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0"
-group= "net.lyonlancer5.mcmp.kawo"
-archivesBaseName = "[1.7.10] Kawo Modes Extended"
+version = "1.2.1"
+group= "net.lyonlancer5"
+archivesBaseName = "EntityMode_Lyons_UUEM"
 
 //added for Java 8 compatibility
 sourceCompatibility = JavaVersion.VERSION_1_8

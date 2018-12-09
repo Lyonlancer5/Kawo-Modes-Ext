@@ -19,7 +19,9 @@ apply plugin: 'forge'
 
 version = "1.0"
 group= "net.lyonlancer5.mcmp.kawo"
-archivesBaseName = "[1.7.10] Kawo Modes Extended"
+archivesBaseName = "EntityMode_Kawo_Extended"
+description = """Kawo Modes Extended is a mod designed as an update to dha_lo_jd's Entity Modes, such as DoorKeeper, HouseKeeper and Accounter. It also includes a rewrite of the entity mode SugarHunter from SugarBiome mod.
+"""
 
 //added for Java 8 compatibility
 sourceCompatibility = JavaVersion.VERSION_1_8

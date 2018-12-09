@@ -1,9 +1,9 @@
-package net.lyonlancer5.mcmp.kawo.modes.dk;
+package net.lyonlancer5.kawo_extend.modes.dk;
 
 
 import littleMaidMobX.LMM_EntityLittleMaid;
-import net.lyonlancer5.mcmp.kawo.modes.Strategy;
-import net.lyonlancer5.mcmp.kawo.modes.StrategyUserHelper;
+import net.lyonlancer5.kawo_extend.modes.Strategy;
+import net.lyonlancer5.kawo_extend.modes.StrategyUserHelper;
 
 public interface DKDelegate extends Strategy {
 	public static abstract class Impl<T extends Strategy> extends Strategy.DefaultImpl implements DKDelegate {

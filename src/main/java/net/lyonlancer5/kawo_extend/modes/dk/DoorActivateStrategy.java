@@ -1,7 +1,7 @@
-package net.lyonlancer5.mcmp.kawo.modes.dk;
+package net.lyonlancer5.kawo_extend.modes.dk;
 
 import littleMaidMobX.LMM_EntityLittleMaid;
-import net.lyonlancer5.mcmp.kawo.modes.DependencyStrategy;
+import net.lyonlancer5.kawo_extend.modes.DependencyStrategy;
 import net.lyonlancer5.mcmp.unmapi.lib.future.BlockPos;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.init.Blocks;

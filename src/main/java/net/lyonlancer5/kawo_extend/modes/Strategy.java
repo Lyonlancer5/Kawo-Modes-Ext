@@ -1,4 +1,4 @@
-package net.lyonlancer5.mcmp.kawo.modes;
+package net.lyonlancer5.kawo_extend.modes;
 
 public interface Strategy {
 	

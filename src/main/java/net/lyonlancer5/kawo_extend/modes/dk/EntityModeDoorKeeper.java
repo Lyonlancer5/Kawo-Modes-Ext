@@ -13,7 +13,7 @@
 * See the License for the specific language governing permissions and       *
 * limitations under the License.                                            *
 \***************************************************************************/
-package net.lyonlancer5.mcmp.kawo.modes.dk;
+package net.lyonlancer5.kawo_extend.modes.dk;
 
 import java.util.ArrayList;
 
@@ -21,8 +21,8 @@ import com.google.common.collect.Lists;
 
 import littleMaidMobX.LMM_EntityLittleMaid;
 import littleMaidMobX.LMM_EntityModeBase;
-import net.lyonlancer5.mcmp.kawo.modes.StrategyUserHelper;
-import net.lyonlancer5.mcmp.kawo.modes.StrategyUserHelperSet;
+import net.lyonlancer5.kawo_extend.modes.StrategyUserHelper;
+import net.lyonlancer5.kawo_extend.modes.StrategyUserHelperSet;
 import net.lyonlancer5.mcmp.unmapi.lib.NonApi;
 import net.lyonlancer5.mcmp.unmapi.util.reflect.ReflectionUtils;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;

@@ -1,4 +1,4 @@
-package net.lyonlancer5.mcmp.kawo.modes.dk;
+package net.lyonlancer5.kawo_extend.modes.dk;
 import littleMaidMobX.LMM_EntityLittleMaid;
 import net.lyonlancer5.mcmp.unmapi.lib.future.Vec3i;
 import net.minecraft.block.Block;

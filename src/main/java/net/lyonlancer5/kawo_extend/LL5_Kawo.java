@@ -13,7 +13,7 @@
 * See the License for the specific language governing permissions and       *
 * limitations under the License.                                            *
 \***************************************************************************/
-package net.lyonlancer5.mcmp.kawo;
+package net.lyonlancer5.kawo_extend;
 
 
 import java.io.File;
@@ -25,9 +25,9 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.relauncher.Side;
 import littleMaidMobX.LMM_EntityModeManager;
-import net.lyonlancer5.mcmp.kawo.modes.ac.EntityModeAccounter;
-import net.lyonlancer5.mcmp.kawo.modes.dk.EntityModeDoorKeeper;
-import net.lyonlancer5.mcmp.kawo.modes.su.EntityModeSugarHunter;
+import net.lyonlancer5.kawo_extend.modes.ac.EntityModeAccounter;
+import net.lyonlancer5.kawo_extend.modes.dk.EntityModeDoorKeeper;
+import net.lyonlancer5.kawo_extend.modes.su.EntityModeSugarHunter;
 import net.lyonlancer5.mcmp.unmapi.Constants;
 import net.lyonlancer5.mcmp.unmapi.util.ModBootstrap;
 import net.minecraftforge.common.config.Configuration;

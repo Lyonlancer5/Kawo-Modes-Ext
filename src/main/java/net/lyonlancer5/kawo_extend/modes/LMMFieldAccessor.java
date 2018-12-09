@@ -1,4 +1,4 @@
-package net.lyonlancer5.mcmp.kawo.modes;
+package net.lyonlancer5.kawo_extend.modes;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

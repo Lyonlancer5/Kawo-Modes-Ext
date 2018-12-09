@@ -1,10 +1,10 @@
-package net.lyonlancer5.mcmp.kawo.modes.dk;
+package net.lyonlancer5.kawo_extend.modes.dk;
 
 import java.util.Set;
 import com.google.common.collect.Sets;
 
 import littleMaidMobX.LMM_EntityLittleMaid;
-import net.lyonlancer5.mcmp.kawo.modes.DependencyStrategy;
+import net.lyonlancer5.kawo_extend.modes.DependencyStrategy;
 import net.lyonlancer5.mcmp.unmapi.lib.future.BlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;

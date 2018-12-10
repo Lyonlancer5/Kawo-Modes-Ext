@@ -16,38 +16,35 @@
 package net.lyonlancer5.kawo_extend.modes.dk;
 
 import littleMaidMobX.LMM_EntityLittleMaid;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.init.Blocks;
+import net.lyonlancer5.kawo_extend.modes.Strategy;
+import net.lyonlancer5.kawo_extend.modes.StrategyUserHelper;
 
-public class DoorCloseStrategy extends DoorActivateStrategy {
+public class StrategyDelegate<T extends Strategy> extends Strategy {
 
-	private static final int distToClose = 7 * 7;
+	public final StrategyUserHelper<T> helper;
+	protected final EntityModeDoorKeeper mode;
 
-	public DoorCloseStrategy(EntityModeDoorKeeper doorKeeper) {
-		super(doorKeeper);
+	public StrategyDelegate(EntityModeDoorKeeper mode, StrategyUserHelper<T> subHelper) {
+		this.mode = mode;
+		this.helper = subHelper;
 	}
 
-	@Override
-	public boolean shouldStrategy() {
-		return true;
+	public T getCurrentStrategy() {
+		return helper.getCurrentStrategy();
 	}
 
-	@Override
-	protected boolean validateBlock(int px, int py, int pz) {
-		LMM_EntityLittleMaid maid = doorKeeper.owner;
-		if (maid.getMaidMasterEntity() == null)
-			return false;
-
-		Block block = maid.worldObj.getBlock(px, py, pz);
-		if (block != Blocks.wooden_door)
-			return false;
-
-		if (maid.getMaidMasterEntity().getDistanceSq(px, py, pz) > distToClose)
-			if (((BlockDoor) Blocks.wooden_door).func_150015_f(maid.worldObj, px, py, pz))
-				return true;
-
+	public boolean checkBlock(int pMode, int px, int py, int pz) {
 		return false;
 	}
 
+	public boolean executeBlock(int pMode, int px, int py, int pz) {
+		return false;
+	}
+
+	public TaskState handleHealthUpdate(LMM_EntityLittleMaid maid, int maidMode, byte par1) {
+		return null;
+	}
+
+	public void updateTask(LMM_EntityLittleMaid maid, int maidMode) {
+	}
 }

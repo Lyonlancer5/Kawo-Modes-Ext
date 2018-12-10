@@ -1,5 +1,5 @@
 /***************************************************************************\
-* Copyright 2013 Yamato	                                                    *
+* Copyright 2018 Lance David Selga [Lyonlancer5]                            *
 *                                                                           *
 * Licensed under the Apache License, Version 2.0 (the "License");           *
 * you may not use this file except in compliance with the License.          *
@@ -21,8 +21,6 @@ import littleMaidMobX.LMM_EntityLittleMaid;
 import littleMaidMobX.LMM_EntityMode_Basic;
 import littleMaidMobX.LMM_EnumSound;
 import littleMaidMobX.LMM_InventoryLittleMaid;
-import net.lyonlancer5.mcmp.unmapi.lib.NonApi;
-import net.lyonlancer5.mcmp.unmapi.util.reflect.ReflectionUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityCreature;
@@ -34,24 +32,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 /**
- * Waco_EntityModeSugarHunter, updated to 1.7
+ * Rewritten SugarHunter without dependencies
  * 
- * @author Yamato 
+ * @author Lyonlancer5
  */
 public class EntityModeSugarHunter extends LMM_EntityMode_Basic {
-	
+
 	private static final String MODENAME = "SugarHunter";
 	private static int MODE_SugarHunter = 0x3201;
-	
+
 	private boolean modeSearchChest = false;
 	private int coolTime = 0;
-	//private boolean speedUp = false;
 	private double lastdistance = 0;
 	private int moveRetryCount = 0;
 
-	@NonApi("net.lyonlancer5.mcmp.kawo.LL5_Kawo")
-	public static void setModeId(int newId){
-		NonApi.Impl.checkAccess(ReflectionUtils.getCaller());
+	private Method mUpdateWanderPath;
+
+	public static void setModeId(int newId) {
 		MODE_SugarHunter = newId;
 	}
 
@@ -82,80 +79,70 @@ public class EntityModeSugarHunter extends LMM_EntityMode_Basic {
 	@Override
 	public boolean checkBlock(int pMode, int px, int py, int pz) {
 		if (modeSearchChest) {
-			if (owner.maidInventory.getFirstEmptyStack() == -1) {
+			if (owner.maidInventory.getFirstEmptyStack() == -1)
 				return super.checkBlock(pMode, px, py, pz);
-			}
+
 			else {
 				clearMy();
 				return false;
 			}
 		}
-		// サトウキビの探索
 		World w = owner.worldObj;
 		Block blockId = w.getBlock(px, py, pz);
 		if (blockId == Blocks.reeds) {
-			if (w.getBlock(px, py - 1, pz) == Blocks.reeds) {
-				//speedUp = true;
-				//SugarBiomeCore.getInstance().debugPrint("find reed %d, %d, %d", px, py, pz);
+			if (w.getBlock(px, py - 1, pz) == Blocks.reeds)
 				return true;
-			}
-			// 伸びていなければ離れた場所に移動してみる
-			if (owner.getRNG().nextInt(600) == 0 && 5 * 5 < owner.getDistanceSq(px + 0.5, py + 0.5, pz + 0.5)) {
-				//SugarBiomeCore.getInstance().debugPrint("move far %d, %d, %d", px, py, pz);
+
+			if (owner.getRNG().nextInt(600) == 0 && 5 * 5 < owner.getDistanceSq(px + 0.5, py + 0.5, pz + 0.5))
 				return true;
-			}
+
 		}
-		// 植え付け可能場所の探索
+
 		else if (blockId == Blocks.dirt || blockId == Blocks.grass || blockId == Blocks.sand) {
 			Material mm = w.getBlock(px, py + 1, pz).getMaterial();
-			if (mm == null || (mm.isReplaceable() && !mm.isLiquid())) {
-				//if (Blocks.reeds.canPlaceBlockAt(w, px, py + 1, pz) && owner.maidInventory.hasItem(Item.getItemFromBlock(Blocks.reeds))) {
-					//speedUp = 2 * 2 < owner.getDistanceSq(px + 0.5, py + 0.5, pz + 0.5);
-					//SugarBiomeCore.getInstance().debugPrint("find point %d, %d, %d", px, py, pz);
-					//return true;
-				//}
-				return Blocks.reeds.canPlaceBlockAt(w, px, py + 1, pz) && owner.maidInventory.hasItem(Item.getItemFromBlock(Blocks.reeds));
-			}
+			if (mm == null || (mm.isReplaceable() && !mm.isLiquid()))
+				return Blocks.reeds.canPlaceBlockAt(w, px, py + 1, pz)
+						&& owner.maidInventory.hasItem(Item.getItemFromBlock(Blocks.reeds));
+
 		}
 		return false;
 	}
 
 	@Override
 	public boolean checkItemStack(ItemStack pItemStack) {
-		return true; // インベントリに空きがあればアイテムは拾いに行く。けど AICollectItem 内でも判定しているみたい
+		return true;
 	}
 
 	@Override
 	public boolean executeBlock(int pMode, int px, int py, int pz) {
 		if (modeSearchChest) {
 			boolean result = super.executeBlock(pMode, px, py, pz);
-			if (!result) {
-				//SugarBiomeCore.getInstance().debugPrint("SearchChest finish");
+			if (!result)
 				modeSearchChest = false;
-			}
+
 			return result;
 		}
 		World w = owner.worldObj;
 		Block blockId = w.getBlock(px, py, pz);
 
-		// さとうきびの刈り取り
 		if (blockId == Blocks.reeds && w.getBlock(px, py - 1, pz) == Blocks.reeds) {
 			owner.setSwing(10, LMM_EnumSound.Null);
 			blockId.dropBlockAsItem(w, px, py, pz, 0, 0);
 			w.setBlockToAir(px, py, pz);
-			w.playSoundEffect(px + 0.5F, py + 0.5F, pz + 0.5F, Blocks.reeds.stepSound.func_150496_b(), (Blocks.reeds.stepSound.getVolume() + 1.0F) / 2.0F,
-					Blocks.reeds.stepSound.getPitch() * 0.8F);
+			w.playSoundEffect(px + 0.5F, py + 0.5F, pz + 0.5F, Blocks.reeds.stepSound.func_150496_b(),
+					(Blocks.reeds.stepSound.getVolume() + 1.0F) / 2.0F, Blocks.reeds.stepSound.getPitch() * 0.8F);
 			coolTime = 10;
-			//speedUp = false;
 		}
-		// 植え付け
+
 		else if (blockId == Blocks.dirt || blockId == Blocks.grass || blockId == Blocks.sand) {
 			Material mm = w.getBlock(px, py + 1, pz).getMaterial();
 			if (mm == null || mm.isReplaceable()) {
-				if (Blocks.reeds.canPlaceBlockAt(w, px, py + 1, pz) && owner.maidInventory.consumeInventoryItem(Item.getItemFromBlock(Blocks.reeds))) {
+				if (Blocks.reeds.canPlaceBlockAt(w, px, py + 1, pz)
+						&& owner.maidInventory.consumeInventoryItem(Item.getItemFromBlock(Blocks.reeds))) {
 					w.setBlock(px, py + 1, pz, Blocks.reeds);
 					owner.setSwing(10, LMM_EnumSound.Null);
-					w.playSoundEffect(px + 0.5F, py + 0.5F, pz + 0.5F, Blocks.reeds.stepSound.func_150496_b(), (Blocks.reeds.stepSound.getVolume() + 1.0F) / 2.0F,
+					w.playSoundEffect(px + 0.5F, py + 0.5F, pz + 0.5F, Blocks.reeds.stepSound.func_150496_b(),
+							(Blocks.reeds.stepSound.getVolume() + 1.0F) / 2.0F,
 							Blocks.reeds.stepSound.getPitch() * 0.8F);
 				}
 			}
@@ -168,9 +155,9 @@ public class EntityModeSugarHunter extends LMM_EntityMode_Basic {
 		if (pMode == MODE_SugarHunter) {
 			for (int i = 0; i < LMM_InventoryLittleMaid.maxInventorySize; i++) {
 				ItemStack item = owner.maidInventory.getStackInSlot(i);
-				if (item != null && item.getItem() == Item.getItemFromBlock(Blocks.reeds)) {
+				if (item != null && item.getItem() == Item.getItemFromBlock(Blocks.reeds))
 					return i;
-				}
+
 			}
 		}
 		return -1;
@@ -179,41 +166,37 @@ public class EntityModeSugarHunter extends LMM_EntityMode_Basic {
 	@Override
 	public boolean isSearchBlock() {
 		if (owner.maidInventory.getFirstEmptyStack() == -1) {
-			//SugarBiomeCore.getInstance().debugPrint("SearchChest start");
-			modeSearchChest = true; // アイテムいっぱいならチェスト探索モード
-			fDistance = 100F; // チェストまでの最大距離
-			return !super.shouldBlock(mmode_Escorter); // ほんとは mytile == null したいけど代用として
+			modeSearchChest = true;
+			fDistance = 100F;
+			return !super.shouldBlock(mmode_Escorter);
 		}
-		if (0 < coolTime) {
-			return false; // クールタイム中は立ち止まる
-		}
+		if (0 < coolTime)
+			return false;
+
 		return true; // サトウキビ探索
 	}
 
 	@Override
 	public void onUpdate(int pMode) {
 		super.onUpdate(pMode);
-		if (0 < coolTime) {
+		if (0 < coolTime)
 			coolTime--;
-		}
+
 	}
 
 	@Override
 	public boolean outrangeBlock(int pMode, int pX, int pY, int pZ) {
-		if (modeSearchChest) {
+		if (modeSearchChest)
 			return super.outrangeBlock(pMode, pX, pY, pZ);
-		}
+
 		boolean result = false;
 		if (!owner.isMaidWaitEx()) {
 			double distance = owner.getDistanceSq(pX + 0.5, pY + 0.5, pZ + 0.5);
 			if (distance == lastdistance) {
-				//TODO updateWanderPath is protected???
-				//owner.updateWanderPath();
+				// TODO updateWanderPath() is protected?
 				reflect_updateWanderPath();
-				//SugarBiomeCore.getInstance().debugPrint("updateWanderPath(%s)", ++moveRetryCount);
-				result = moveRetryCount < 40; // 40回までリトライ可能
-			}
-			else {
+				result = moveRetryCount < 40;
+			} else {
 				result = owner.getNavigator().tryMoveToXYZ(pX, pY, pZ, 1.0);
 			}
 			lastdistance = distance;
@@ -223,19 +206,18 @@ public class EntityModeSugarHunter extends LMM_EntityMode_Basic {
 
 	@Override
 	public int priority() {
-		return 5999;	// IC2だとサトウキビが燃えるようになるので、LMM_EntityMode_Cooking より優先度を上げる
+		return 5999;
 	}
 
 	@Override
 	public void resetBlock(int pMode) {
 		super.resetBlock(pMode);
-		//speedUp = false;
 		moveRetryCount = 0;
 	}
 
 	@Override
 	public boolean setMode(int pMode) {
-		if(pMode == MODE_SugarHunter){
+		if (pMode == MODE_SugarHunter) {
 			owner.setBloodsuck(false);
 			owner.aiWander.setEnable(true);
 			owner.aiJumpTo.setEnable(false);
@@ -248,25 +230,39 @@ public class EntityModeSugarHunter extends LMM_EntityMode_Basic {
 
 	@Override
 	public boolean shouldBlock(int pMode) {
-		if (modeSearchChest) {
+		if (modeSearchChest)
 			return super.shouldBlock(pMode);
-		}
+
 		return false;
 	}
 
 	@Override
 	protected void clearMy() {
 		super.clearMy();
-		modeSearchChest = false;	// リセット
+		modeSearchChest = false;
 	}
-	
-	private void reflect_updateWanderPath(){
-		try{
-			Method m = ReflectionUtils.findMethod(EntityCreature.class, new String[]{"func_70779_j", "updateWanderPath"});
-			m.invoke(owner);
-		} catch (Exception e) {
-			
+
+	private void reflect_updateWanderPath() {
+
+		if (mUpdateWanderPath == null) {
+			try {
+				mUpdateWanderPath = EntityCreature.class.getDeclaredMethod("updateWanderPath");
+			} catch (Exception e) {
+				try {
+					mUpdateWanderPath = EntityCreature.class.getDeclaredMethod("func_70779_j");
+
+				} catch (Exception e1) {
+
+				}
+			}
+		}
+
+		if (mUpdateWanderPath != null) {
+			try {
+				mUpdateWanderPath.invoke(owner);
+			} catch (Exception e) {
+				//
+			}
 		}
 	}
 }
-

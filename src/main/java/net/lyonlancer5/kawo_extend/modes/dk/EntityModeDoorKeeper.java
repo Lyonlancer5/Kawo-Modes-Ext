@@ -1,5 +1,5 @@
 /***************************************************************************\
-* Copyright 2017 [Lyonlancer5]                                              *
+* Copyright 2018 Lance David Selga [Lyonlancer5]                            *
 *                                                                           *
 * Licensed under the Apache License, Version 2.0 (the "License");           *
 * you may not use this file except in compliance with the License.          *
@@ -21,55 +21,100 @@ import com.google.common.collect.Lists;
 
 import littleMaidMobX.LMM_EntityLittleMaid;
 import littleMaidMobX.LMM_EntityModeBase;
+import net.lyonlancer5.kawo_extend.modes.Strategy;
 import net.lyonlancer5.kawo_extend.modes.StrategyUserHelper;
 import net.lyonlancer5.kawo_extend.modes.StrategyUserHelperSet;
-import net.lyonlancer5.mcmp.unmapi.lib.NonApi;
-import net.lyonlancer5.mcmp.unmapi.util.reflect.ReflectionUtils;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.init.Blocks;
 
-/**
- * @author Lyonlancer5
- */
 public class EntityModeDoorKeeper extends LMM_EntityModeBase {
-
-	//public enum State { TO_OPEN, TO_CLOSE, WAIT; }
 
 	public static final String MODE_NAME = "DoorKeeper";
 
 	private static int modeID = 0x0203;
 	static int waitMargin = 60;
 
-	public final StrategyUserHelper<DKDelegate> helper;
+	public final StrategyUserHelper<StrategyDelegate<? extends Strategy>> helper;
 	public final StrategyUserHelperSet helpers;
 
-	@NonApi("net.lyonlancer5.mcmp.kawo.LL5_Kawo")
-	public static void setModeId(int newID){
-		NonApi.Impl.checkAccess(ReflectionUtils.getCaller());
+	public static void setModeId(int newID) {
 		modeID = newID;
 	}
-	
+
 	public EntityModeDoorKeeper(LMM_EntityLittleMaid pEntity) {
 		super(pEntity);
 		helpers = new StrategyUserHelperSet();
 		{
-
-			StrategyUserHelper<DoorActivateStrategy> subHelper = new StrategyUserHelper<DoorActivateStrategy>(new DoorCloseStrategy(this));
+			// Setup Door-related controls
+			StrategyUserHelper<DoorActivateStrategy> subHelper = new StrategyUserHelper<DoorActivateStrategy>(
+					new DoorCloseStrategy(this));
 			subHelper.add(new MasterLookingDoorOpenStrategy(this));
-			helper = new StrategyUserHelper<DKDelegate>(new EscorterDKDelegate(this, subHelper));
+			helper = new StrategyUserHelper<StrategyDelegate<?>>(new StrategyDelegate<DoorActivateStrategy>(this, subHelper) {
+
+				@Override
+				public boolean checkBlock(int pMode, int px, int py, int pz) {
+					return getCurrentStrategy().checkBlock(pMode, px, py, pz);
+				}
+
+				@Override
+				public boolean executeBlock(int pMode, int px, int py, int pz) {
+					return getCurrentStrategy().executeBlock(pMode, px, py, pz);
+				}
+
+				@Override
+				public boolean shouldStrategy() {
+					return !mode.owner.isMaidWait() && !mode.owner.isFreedom();
+				}
+
+				@Override
+				public void updateTask(LMM_EntityLittleMaid maid, int maidMode) {
+					getCurrentStrategy().updateTask(maid, maidMode);
+				}
+			});
 			subHelper.addDependencyStrategy(helper);
 			helpers.add(subHelper);
 		}
+
 		{
+			// Setup lever-related controls
 			StrategyUserHelper<LeverActivateStrategy> subHelper = new StrategyUserHelper<LeverActivateStrategy>(
-					new DefaultLeverActivateStrategy(this));
+					new LeverActivateStrategy(this));
 			subHelper.add(new LeverOnStrategy(this));
 			subHelper.add(new LeverOffStrategy(this));
-			helper.add(new FreedomDKDelegate(this, subHelper));
+			helper.add(new StrategyDelegate<LeverActivateStrategy>(this, subHelper) {
+				@Override
+				public boolean checkBlock(int pMode, int px, int py, int pz) {
+					return getCurrentStrategy().checkBlock(pMode, px, py, pz);
+				}
+
+				@Override
+				public boolean executeBlock(int pMode, int px, int py, int pz) {
+					return getCurrentStrategy().executeBlock(pMode, px, py, pz);
+				}
+
+				@Override
+				public TaskState handleHealthUpdate(LMM_EntityLittleMaid maid, int maidMode, byte par1) {
+					for (LeverActivateStrategy strategy : helper.getStrategies())
+						if (strategy.handleHealthUpdate(maid, maidMode, par1) == TaskState.BREAK)
+							return TaskState.BREAK;
+
+					return TaskState.CONTINUE;
+				}
+
+				@Override
+				public boolean shouldStrategy() {
+					return mode.owner.isFreedom();
+				}
+
+				@Override
+				public void updateTask(LMM_EntityLittleMaid maid, int maidMode) {
+					getCurrentStrategy().updateTask(maid, maidMode);
+				}
+			});
 			subHelper.addDependencyStrategy(helper);
 			helpers.add(subHelper);
 		}
@@ -83,11 +128,9 @@ public class EntityModeDoorKeeper extends LMM_EntityModeBase {
 		ltasks[0] = new EntityAITasks(owner.aiProfiler);
 		ArrayList<EntityAITasks> copyTasks = Lists.newArrayList(pDefaultMove.taskEntries);
 		ltasks[0].taskEntries = copyTasks;
-		//ltasks[0].removeTask(owner.aiFindBlock);
-		//ltasks[0].addTask(4, new EntityAIFindBlockEx(owner));
+		// ltasks[0].removeTask(owner.aiFindBlock);
+		// ltasks[0].addTask(4, new EntityAIFindBlockEx(owner));
 		ltasks[1] = new EntityAITasks(owner.aiProfiler);
-
-		// 索敵系
 		ltasks[1].addTask(1, new EntityAIHurtByTarget(owner, true));
 
 		owner.addMaidMode(ltasks, MODE_NAME, modeID);
@@ -108,30 +151,12 @@ public class EntityModeDoorKeeper extends LMM_EntityModeBase {
 		return getCurrentStrategy().executeBlock(pMode, px, py, pz);
 	}
 
-	public DKDelegate getCurrentStrategy() {
+	public StrategyDelegate<?> getCurrentStrategy() {
 		return helper.getCurrentStrategy();
 	}
 
-	//@Override
-	//public TaskState handleHealthUpdate(LMM_EntityLittleMaid maid, int maidMode, byte par1) {
-	//	for (DKDelegate strategy : helper.getStrategies()) {
-	//		if (strategy.handleHealthUpdate(maid, maidMode, par1) == TaskState.BREAK) {
-	//			return TaskState.BREAK;
-	//		}
-	//	}
-	//	return TaskState.CONTINUE;
-	//}
-
 	@Override
 	public void init() {
-		// 登録モードの名称追加
-		//addLocalization(MODE_NAME, new JPNameProvider() {
-		//	@Override
-		//	public String getLocalization() {
-		//		return "門番";
-		//	}
-		//});
-		//LMM_EntityMode_AcceptBookCommand.add(new ModeAlias(MODE_ID, MODE_NAME, "Dk"));
 	}
 
 	@Override
@@ -173,9 +198,10 @@ public class EntityModeDoorKeeper extends LMM_EntityModeBase {
 
 	@Override
 	public void updateAITick(int pMode) {
-		if(pMode == modeID) getCurrentStrategy().updateTask(owner, pMode);
+		if (pMode == modeID)
+			getCurrentStrategy().updateTask(owner, pMode);
 	}
-	
+
 	@Override
 	public boolean changeMode(EntityPlayer pentityplayer) {
 		return checkItemStack(owner.maidInventory.getStackInSlot(0));

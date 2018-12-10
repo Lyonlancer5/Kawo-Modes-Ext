@@ -1,8 +1,21 @@
+/***************************************************************************\
+* Copyright 2018 Lance David Selga [Lyonlancer5]                            *
+*                                                                           *
+* Licensed under the Apache License, Version 2.0 (the "License");           *
+* you may not use this file except in compliance with the License.          *
+* You may obtain a copy of the License at                                   *
+*                                                                           *
+*     http://www.apache.org/licenses/LICENSE-2.0                            *
+*                                                                           *
+* Unless required by applicable law or agreed to in writing, software       *
+* distributed under the License is distributed on an "AS IS" BASIS,         *
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+* See the License for the specific language governing permissions and       *
+* limitations under the License.                                            *
+\***************************************************************************/
 package net.lyonlancer5.kawo_extend.modes.dk;
 
 import littleMaidMobX.LMM_EntityLittleMaid;
-import net.lyonlancer5.mcmp.unmapi.lib.future.BlockPos;
-import net.lyonlancer5.mcmp.unmapi.lib.future.Vec3i;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +24,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 
-public class MasterLookingDoorOpenStrategy extends DoorActivateStrategy.Impl {
+public class MasterLookingDoorOpenStrategy extends DoorActivateStrategy {
 
 	private static final int distToOpen = 6 * 6;
 
@@ -22,31 +35,29 @@ public class MasterLookingDoorOpenStrategy extends DoorActivateStrategy.Impl {
 	@Override
 	public boolean shouldStrategy() {
 		LMM_EntityLittleMaid maid = doorKeeper.owner;
-		BlockPos mstLookAtPos = getBlockPositionMasterLookAt();
+		int[] mstLookAtPos = getBlockPositionMasterLookAt();
 		if (mstLookAtPos != null) {
-			double distanceSq = mstLookAtPos.distanceSq(new Vec3i(maid.getMaidMasterEntity()));
+			double distanceSq = maid.getMaidMasterEntity().getDistanceSq(mstLookAtPos[0], mstLookAtPos[1],
+					mstLookAtPos[2]);
 			if (distanceSq <= distToOpen) {
-				int px = mstLookAtPos.getX();
-				int py = mstLookAtPos.getY();
-				int pz = mstLookAtPos.getZ();
-				Block blockId = maid.worldObj.getBlock(px, py, pz);
-				if (blockId != Blocks.wooden_door) {
+				Block blockId = maid.worldObj.getBlock(mstLookAtPos[0], mstLookAtPos[1], mstLookAtPos[2]);
+				if (blockId != Blocks.wooden_door)
 					return false;
-				}
+
 				BlockDoor door = (BlockDoor) Blocks.wooden_door;
-				if (!door.func_150015_f(maid.worldObj, px, py, pz)) {
+				if (!door.func_150015_f(maid.worldObj, mstLookAtPos[0], mstLookAtPos[1], mstLookAtPos[2]))
 					return true;
-				}
+
 			}
 		}
 		return false;
 	}
 
-	private BlockPos getBlockPositionMasterLookAt() {
+	private int[] getBlockPositionMasterLookAt() {
 		EntityPlayer player = doorKeeper.owner.getMaidMasterEntity();
-		if (player == null) {
+		if (player == null)
 			return null;
-		}
+
 		MovingObjectPosition mop;
 		{
 			float rpt = 1.0f;
@@ -57,9 +68,10 @@ public class MasterLookingDoorOpenStrategy extends DoorActivateStrategy.Impl {
 			Vec3 vec32 = vec3.addVector(vec31.xCoord * distance, vec31.yCoord * distance, vec31.zCoord * distance);
 			mop = player.worldObj.rayTraceBlocks(vec3, vec32);
 		}
-		if (mop != null && mop.typeOfHit == MovingObjectType.BLOCK) {
-			return new BlockPos(mop.blockX, mop.blockY, mop.blockZ);
-		}
+
+		if (mop != null && mop.typeOfHit == MovingObjectType.BLOCK)
+			return new int[] { mop.blockX, mop.blockY, mop.blockZ };
+
 		return null;
 	}
 
@@ -67,20 +79,18 @@ public class MasterLookingDoorOpenStrategy extends DoorActivateStrategy.Impl {
 	protected boolean validateBlock(int px, int py, int pz) {
 		LMM_EntityLittleMaid maid = doorKeeper.owner;
 		Block blockId = maid.worldObj.getBlock(px, py, pz);
-		if (blockId != Blocks.wooden_door) {
+		if (blockId != Blocks.wooden_door)
 			return false;
-		}
-		BlockPos checkPos = new BlockPos(px, py, pz);
-		double distanceSq = checkPos.distanceSq(new Vec3i(maid.getMaidMasterEntity()));
 
+		int[] checkPos = new int[] { px, py, pz };
+		double distanceSq = maid.getMaidMasterEntity().getDistanceSq(px, py, pz);
 		BlockDoor door = (BlockDoor) Blocks.wooden_door;
 		if (distanceSq <= distToOpen) {
-			BlockPos mstLookAtPos = getBlockPositionMasterLookAt();
-			if (mstLookAtPos != null && mstLookAtPos.equals(checkPos)) {
-				if (!door.func_150015_f(maid.worldObj, px, py, pz)) {
+			int[] mstLookAtPos = getBlockPositionMasterLookAt();
+			if (mstLookAtPos != null && mstLookAtPos.equals(checkPos))
+				if (!door.func_150015_f(maid.worldObj, px, py, pz))
 					return true;
-				}
-			}
+
 		}
 		return false;
 	}

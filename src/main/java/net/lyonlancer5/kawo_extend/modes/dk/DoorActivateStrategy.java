@@ -16,7 +16,7 @@
 package net.lyonlancer5.kawo_extend.modes.dk;
 
 import littleMaidMobX.LMM_EntityLittleMaid;
-import net.lyonlancer5.kawo_extend.modes.Strategy;
+import net.lyonlancer5.kawo_extend.Strategy;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.init.Blocks;
 

@@ -21,9 +21,9 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import littleMaidMobX.LMM_EntityModeManager;
-import net.lyonlancer5.kawo_extend.modes.ac.EntityModeAccounter;
+import net.lyonlancer5.kawo_extend.modes.EntityModeAccounter;
+import net.lyonlancer5.kawo_extend.modes.EntityModeSugarHunter;
 import net.lyonlancer5.kawo_extend.modes.dk.EntityModeDoorKeeper;
-import net.lyonlancer5.kawo_extend.modes.su.EntityModeSugarHunter;
 import net.minecraftforge.common.config.Configuration;
 
 /**

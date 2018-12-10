@@ -13,7 +13,7 @@
 * See the License for the specific language governing permissions and       *
 * limitations under the License.                                            *
 \***************************************************************************/
-package net.lyonlancer5.kawo_extend.modes.su;
+package net.lyonlancer5.kawo_extend.modes;
 
 import java.lang.reflect.Method;
 

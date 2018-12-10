@@ -21,9 +21,9 @@ import com.google.common.collect.Lists;
 
 import littleMaidMobX.LMM_EntityLittleMaid;
 import littleMaidMobX.LMM_EntityModeBase;
-import net.lyonlancer5.kawo_extend.modes.Strategy;
-import net.lyonlancer5.kawo_extend.modes.StrategyUserHelper;
-import net.lyonlancer5.kawo_extend.modes.StrategyUserHelperSet;
+import net.lyonlancer5.kawo_extend.Strategy;
+import net.lyonlancer5.kawo_extend.StrategyUserHelper;
+import net.lyonlancer5.kawo_extend.StrategyUserHelperSet;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;

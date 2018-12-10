@@ -20,7 +20,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 import littleMaidMobX.LMM_EntityLittleMaid;
-import net.lyonlancer5.kawo_extend.modes.Strategy;
+import net.lyonlancer5.kawo_extend.Strategy;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.init.Blocks;

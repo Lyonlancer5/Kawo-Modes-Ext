@@ -16,8 +16,8 @@
 package net.lyonlancer5.kawo_extend.modes.dk;
 
 import littleMaidMobX.LMM_EntityLittleMaid;
-import net.lyonlancer5.kawo_extend.modes.Strategy;
-import net.lyonlancer5.kawo_extend.modes.StrategyUserHelper;
+import net.lyonlancer5.kawo_extend.Strategy;
+import net.lyonlancer5.kawo_extend.StrategyUserHelper;
 
 public class StrategyDelegate<T extends Strategy> extends Strategy {
 

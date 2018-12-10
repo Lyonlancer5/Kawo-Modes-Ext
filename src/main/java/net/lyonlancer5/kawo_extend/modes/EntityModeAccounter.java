@@ -13,7 +13,7 @@
 * See the License for the specific language governing permissions and       *
 * limitations under the License.                                            *
 \***************************************************************************/
-package net.lyonlancer5.kawo_extend.modes.ac;
+package net.lyonlancer5.kawo_extend.modes;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
 
 import littleMaidMobX.LMM_EntityLittleMaid;
 import littleMaidMobX.LMM_EntityModeBase;
-import net.lyonlancer5.kawo_extend.modes.LMMFieldAccessor;
+import net.lyonlancer5.kawo_extend.LMMFieldAccessor;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAITasks;

@@ -22,7 +22,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import littleMaidMobX.LMM_EntityModeManager;
 import net.lyonlancer5.kawo_extend.modes.EntityModeAccounter;
-import net.lyonlancer5.kawo_extend.modes.EntityModeSugarHunter;
 import net.lyonlancer5.kawo_extend.modes.dk.EntityModeDoorKeeper;
 import net.minecraftforge.common.config.Configuration;
 
@@ -34,7 +33,7 @@ import net.minecraftforge.common.config.Configuration;
 @Mod(modid = LL5_Kawo.MODID, name = "Kawo Modes Extended", version = LL5_Kawo.VERSION, dependencies = "required-after:lmmx")
 public class LL5_Kawo {
 
-	public static final String MODID = "ll5_kawo", VERSION = "1.0.0.0";
+	public static final String MODID = "ll5_kawo", VERSION = "1.1";
 
 	private static LL5_Kawo instance;
 
@@ -42,18 +41,12 @@ public class LL5_Kawo {
 	public void preInit(FMLPreInitializationEvent event) {
 		Configuration conf = new Configuration(new File("config/kawo_modes.cfg"));
 		conf.load();
-
-		EntityModeAccounter.setModeId(
-				conf.get("Modes", "Accounter ID", 0x0202, "Mode ID for Accounter, do not change unless necessary", 0, Short.MAX_VALUE).getInt());
-		EntityModeDoorKeeper.setModeId(
-				conf.get("Modes", "DoorKeeper ID", 0x0203, "Mode ID for Door Keeper, do not change unless necessary", 0, Short.MAX_VALUE).getInt());
-		EntityModeSugarHunter.setModeId(
-				conf.get("Modes", "SugarHunter ID", 0x3201, "Mode ID for SugarHunter, do not change unless necessary", 0, Short.MAX_VALUE).getInt());
-
-		// TODO make this dynamic ~ set limit per maid in the Transaction Slip instead
-		EntityModeAccounter.setSugarCount(conf.get("Modes", "Accounter Sugar Payment Cutoff", 64,
-				"Determines the minimum sugar amount each LittleMaid has if an Accounter is nearby").getInt());
-
+		EntityModeAccounter.setModeId(conf.get("Modes", "Accounter ID", 0x0202,
+				"Mode ID for Accounter, do not change unless conflicting with another mode (0, 32767]", 0,
+				Short.MAX_VALUE).getInt());
+		EntityModeDoorKeeper.setModeId(conf.get("Modes", "DoorKeeper ID", 0x0203,
+				"Mode ID for Door Keeper, do not change unless conflicting with another mode (0, 32767]", 0,
+				Short.MAX_VALUE).getInt());
 		conf.save();
 	}
 
@@ -61,7 +54,6 @@ public class LL5_Kawo {
 	public void postInit(FMLPostInitializationEvent event) {
 		LMM_EntityModeManager.maidModeList.add(new EntityModeAccounter(null));
 		LMM_EntityModeManager.maidModeList.add(new EntityModeDoorKeeper(null));
-		LMM_EntityModeManager.maidModeList.add(new EntityModeSugarHunter(null));
 	}
 
 	@Mod.InstanceFactory

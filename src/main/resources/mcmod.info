@@ -2,9 +2,9 @@
 {
   "modid": "ll5_kawo",
   "name": "Kawo Modes Extended",
-  "description": "Kawo Modes Extended is a mod designed as an update to dha_lo_jd's Entity Modes, such as DoorKeeper, HouseKeeper and Accounter. It also includes a rewrite of the entity mode SugarHunter from SugarBiome mod.",
+  "description": "Kawo Modes Extended is a mod designed as an update to dha_lo_jd's Entity Modes, such as DoorKeeper, HouseKeeper and Accounter.",
   "mcversion": "1.7.10",
-  "version" : "1.0",
+  "version" : "1.1",
   "url": "https://github.com/Lyonlancer5/Kawo-Modes-Extended",
   "updateUrl": "",
   "authors": ["Lyonlancer5"],

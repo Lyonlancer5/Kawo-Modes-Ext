@@ -1,7 +1,7 @@
 littleMaidMob.mode.Accounter=Accounter
-littleMaidMob.mode.DoorKeeper=DoorKeeper
 littleMaidMob.mode.F-Accounter=F-Accounter
-littleMaidMob.mode.SugarHunter=SugarHunter
-littleMaidMob.mode.F-SugarHunter=F-SugarHunter
-littleMaidMob.mode.T-SugarHunter=T-SugarHunter
-littleMaidMob.mode.D-SugarHunter=D-SugarHunter
+
+littleMaidMob.mode.DoorKeeper=DoorKeeper
+
+achievement.contract=Enlightenment!
+achievement.contract.desc=Capture the LittleMaid!

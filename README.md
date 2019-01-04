@@ -1,14 +1,13 @@
 Kawo Modes Extended - Updates to Kawo Entity Mode
 ==================================
 
-### _Latest Version: 1.0_
+### _Latest Version: 1.1_
 
 Overview
 --------
 
 Kawo Modes Extended is a mod designed as an update to [dha_lo_jd's](https://github.com/dha_lo_jd) Entity Modes, such as [DoorKeeper](https://github.com/dha_lo_jd/Minecraft_DK), 
 [HouseKeeper](https://github.com/dha_lo_jd/Minecraft_hk), and [Accounter](https://github.com/dha_lo_jd/Minecraft_Accounter).
-It also includes a rewrite of the entity mode SugarHunter, from SugarBiome mod.
 
 Prerequisites
 -------------

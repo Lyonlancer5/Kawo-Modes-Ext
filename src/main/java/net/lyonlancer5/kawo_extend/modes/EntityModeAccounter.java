@@ -33,7 +33,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
 /**
- * Rewritten Accounter without strategies
+ * Rewritten Accounter without strategies with a remembrance to Supply Wagons
  * 
  * @author Lyonlancer5
  */
@@ -43,15 +43,10 @@ public class EntityModeAccounter extends LMM_EntityModeBase {
 	private static int modeID = 0x0202;
 
 	private final IEntitySelector maidSelector;
-	private static int sugarCount = 64; // TODO make this per instance
+	private int sugarCount = 64;
 
 	public static void setModeId(int newID) {
 		modeID = newID;
-	}
-
-	// TODO make this per instance
-	public static void setSugarCount(int newCount) {
-		sugarCount = newCount;
 	}
 
 	public EntityModeAccounter(LMM_EntityLittleMaid pEntity) {
@@ -74,8 +69,7 @@ public class EntityModeAccounter extends LMM_EntityModeBase {
 	}
 
 	public void addEntityMode(EntityAITasks pDefaultMove, EntityAITasks pDefaultTargeting) {
-		EntityAITasks[] ltasks = new EntityAITasks[] { pDefaultMove, pDefaultTargeting };
-		owner.addMaidMode(ltasks, MODE_NAME, modeID);
+		owner.addMaidMode(new EntityAITasks[] { pDefaultMove, pDefaultTargeting }, MODE_NAME, modeID);
 	}
 
 	public void onUpdate(int pMode) {
@@ -91,10 +85,15 @@ public class EntityModeAccounter extends LMM_EntityModeBase {
 
 			List<LMM_EntityLittleMaid> maids = getMaidsInRange();
 
+			convertReeds(owner);
+			sugarCount = (int) (getSugarAmount(owner) / Math.max(1, maids.size()));
+
 			NBTTagCompound disp = transactSlip.getTagCompound().getCompoundTag("display");
 			NBTTagList lore = new NBTTagList();
-			lore.appendTag(new NBTTagString("Sugar Count: " + getSugarAmount(owner)));
-			lore.appendTag(new NBTTagString("Maids in range: " + maids.size()));
+			lore.appendTag(new NBTTagString("\u00A7r\u00A77- \u00A7fHolder ID: \u00A7a" + owner.getEntityId()));
+			lore.appendTag(new NBTTagString("\u00A7r\u00A77- \u00A7fSugar Count: \u00A7a" + getSugarAmount(owner)));
+			lore.appendTag(new NBTTagString("\u00A7r\u00A77- \u00A7fMaids in range: \u00A7a" + maids.size()));
+			lore.appendTag(new NBTTagString("\u00A7r\u00A77- \u00A7fAmount per Maid: \u00A7a" + sugarCount));
 			disp.setTag("Lore", lore);
 
 			for (LMM_EntityLittleMaid entityLittleMaid : maids) {
@@ -140,18 +139,28 @@ public class EntityModeAccounter extends LMM_EntityModeBase {
 		return false;
 	}
 
-	public boolean changeMode(EntityPlayer pentityplayer) {
-		ItemStack p0 = owner.maidInventory.getStackInSlot(0);
+	@Override
+	public boolean checkItemStack(ItemStack pItemStack) {
+		return pItemStack != null && pItemStack.getItem() == Items.paper && pItemStack.hasTagCompound()
+				&& pItemStack.getTagCompound().getBoolean("AccounterSlip");
+	}
 
-		if (p0.getItem() == Items.paper) {
+	public boolean changeMode(EntityPlayer pentityplayer) {
+		ItemStack expectedStack = owner.maidInventory.getStackInSlot(0);
+
+		if (expectedStack != null && expectedStack.getItem() == Items.paper) {
 			NBTTagCompound display = new NBTTagCompound();
-			display.setString("Name", "Transaction Slip");
+			display.setString("Name", "\u00A7r\u00A7bTransaction Slip");
 			NBTTagList lore = new NBTTagList();
-			lore.appendTag(new NBTTagString("Sugar Count: --"));
-			lore.appendTag(new NBTTagString("Maids in range: --"));
+			lore.appendTag(new NBTTagString("\u00A7r\u00A77- \u00A7fHolder ID: \u00A7a" + owner.getEntityId()));
 			display.setTag("Lore", lore);
-			p0.getTagCompound().setTag("display", display);
-			owner.setMaidMode(modeID);
+
+			if (!expectedStack.hasTagCompound())
+				expectedStack.setTagCompound(new NBTTagCompound());
+
+			expectedStack.getTagCompound().setTag("display", display);
+			expectedStack.getTagCompound().setBoolean("AccounterSlip", true);
+			owner.setMaidMode(MODE_NAME);
 			return true;
 		}
 
@@ -226,5 +235,14 @@ public class EntityModeAccounter extends LMM_EntityModeBase {
 		if (i == -1)
 			return null;
 		return maid.maidInventory.getStackInSlot(i);
+	}
+
+	private void convertReeds(LMM_EntityLittleMaid maid) {
+		for (int i = 0; i < maid.maidInventory.mainInventory.length; i++) {
+			ItemStack element = maid.maidInventory.mainInventory[i];
+			if (element != null && element.getItem() == Items.reeds && element.stackSize == element.getMaxStackSize())
+				maid.maidInventory.mainInventory[i].func_150996_a(Items.sugar);
+
+		}
 	}
 }
